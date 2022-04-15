@@ -5,6 +5,7 @@ from typing import NamedTuple, Iterable
 import pkg_resources
 
 __version__ = '1.0.0'
+JAVA_COMMAND = 'java'
 
 
 class SentiResult(NamedTuple):
@@ -23,4 +24,9 @@ def _paths() -> tuple[str, str]:
     jar = pkg_resources.resource_filename(__name__, 'original/SentiStrength.jar')
     data = pkg_resources.resource_filename(__name__, 'original/data') + '/'
     return jar, data
+
+
+def _cmd() -> list[str]:
+    jar, data = _paths()
+    return [JAVA_COMMAND, '-jar', jar, 'sentidata', data]
 
