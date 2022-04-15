@@ -1,71 +1,42 @@
 # Python-SentiStrength
-Python 3 Wrapper for SentiStrength, reads a single or multiple input with options for binary class or scale output.
 
-Ensure that you have SentiStrength.jar file and SentiStrengthData Language folders, otherwise you can download them from http://sentistrength.wlv.ac.uk/. For jar file, you will have to email Dr. Mike Thelwall.
+Python 3 Wrapper for SentiStrength.
+
+**Note: This package has the SentiStrength JAR file built in to simplify access. However, the original author did not release the JAR free for commercial use. If you are using this for commercial purposes, please email the original author Dr. Mike Thelwall to buy the commercial license. More details about licensing at (http://sentistrength.wlv.ac.uk/).**
 
 ## Installation
 
-Pip:
+You have to install `python >= 3.7` and `java JRE >= 1.8.0` first. Then, install this library with `pip`.
 
 ```sh
-pip install sentistrength
+pip install pysenti
 ```
-
 
 ## Examples
 
-Example use (single string):
+Single string example:
 
 ```python
->>> from sentistrength import PySentiStr
->>> senti = PySentiStr()
->>> result = senti.getSentiment('What a lovely day')
->>> print(result)
+import pysenti
 
-... [0.25]
+s = pysenti.get_senti('What a lovely day')
+# SentiResult(positive=2, negative=-1, neutral=1)
+
+s.scale()
+# 1
+s.is_positive()
+# True
 ```
 
+Multiple strings example:
 
-Example use (list of strings or pandas Series):
+If you have a list of strings, please use this function and don't call `get_senti` in a loop. This is because this function only opens one subprocess to process all strings in the list, whereas `get_senti` opens a new subprocess every time.
 
 ```python
->>> from sentistrength import PySentiStr
->>> senti = PySentiStr()
->>> str_arr = ['What a lovely day', 'What a bad day']
->>> result = senti.getSentiment(str_arr, score='scale')
->>> print(result)
+import pysenti
 
-... [1, -1]
-# OR, if you want dual scoring (a score each for positive rating and negative rating)
->>> result = senti.getSentiment(str_arr, score='dual')
->>> print(result)
-
-... [(2, -1), (1, -2)]
-# OR, if you want binary scoring (1 for positive sentence, -1 for negative sentence)
->>> result = senti.getSentiment(str_arr, score='binary')
->>> print(result)
-
-... [1, -1]
-# OR, if you want trinary scoring (a score each for positive rating, negative rating and neutral rating)
->>> result = senti.getSentiment(str_arr, score='trinary')
->>> print(result)
-
-... [(2, -1, 1), (1, -2, -1)]
+pysenti.get_senti_list(['What a lovely day', 'I love cats'])
 ```
-
-## Path Setup
-
-Specify the paths as such:
-
-```python
->>> senti = PySentiStr()
->>> senti.setSentiStrengthPath('C:/Documents/SentiStrength.jar') # Note: Provide absolute path instead of relative path
->>> senti.setSentiStrengthLanguageFolderPath('C:/Documents/SentiStrengthData/') # Note: Provide absolute path instead of relative path
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
