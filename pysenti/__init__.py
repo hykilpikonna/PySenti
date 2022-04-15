@@ -5,7 +5,7 @@ from typing import NamedTuple, Iterable
 
 import pkg_resources
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 JAVA_COMMAND = 'java'
 
 
@@ -15,10 +15,13 @@ class SentiResult(NamedTuple):
     neutral: int
 
     def scale(self) -> int:
-        return self.positive - self.negative
+        return self.positive + self.negative
 
     def is_positive(self) -> bool:
         return self.scale() > 0
+
+    def dominant(self) -> int:
+        return self.negative if -self.negative > self.positive else self.positive
 
 
 def _paths() -> tuple[str, str]:
