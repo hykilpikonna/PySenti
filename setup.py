@@ -11,7 +11,7 @@ README = (HERE / "README.md").read_text()
 
 # This call to setup() does all the work
 setup(
-    name="PySenti",
+    name="PySentiStrength",
     version=pysenti.__version__,
     description="Python 3 Wrapper for SentiStrength",
     long_description=README,
