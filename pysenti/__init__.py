@@ -55,3 +55,19 @@ def get_senti(text: str) -> SentiResult:
     return _decode_output(sp.check_output([*_cmd(), 'trinary', 'text', text.strip()]))
 
 
+def get_senti_list(lst: Iterable[str]) -> list[SentiResult]:
+    """
+    Get sentiment score of a list of text
+
+    This should be faster than running `get_senti` in a loop because this function only opens the
+    java runtime once.
+
+    :param lst: List of texts
+    :return: Sentiment scores of the list of texts
+    """
+    # Open process
+    with sp.Popen([*_cmd(), 'trinary', 'stdin'], stdin=sp.PIPE, stdout=sp.PIPE, text=True) as p:
+        # Send input
+        combined_text = '\n'.join(lst)
+        stdout, _ = p.communicate(combined_text)
+        return [_decode_output(s) for s in stdout.split('\n') if s != '']
